@@ -28,24 +28,21 @@ passport.use(
     callbackURL: '/auth/google/callback',
     proxy: true        
   }, 
-  (accessToken, refreshToken, profile, done) => {
+  async (accessToken, refreshToken, profile, done) => {
      
     // Async action - does not return user directly, returns a promise
-    User.findOne({ googleID : profile.id })
-        .then(existingUser => {
+    const existingUser = await User.findOne({ googleID : profile.id })
+    
             if(existingUser){
                 // we already have a record with given profile ID - do not create new record
-                done(null, existingUser);
-            } else {
+                return done(null, existingUser);
+            } 
                 // record not found - Then create new record
                 // creating a new intance of a user   
-                new User({ googleID: profile.id })
-                // save() adds instance to db
-                .save()
+                const user = await new User({ googleID: profile.id }).save()
                 // callback returns a model instance - user provided inside of promise callback
-                .then(user => done(null, user));
-            }
-        });
+                 done(null, user);
+            
     }
   )
 );
