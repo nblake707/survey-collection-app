@@ -9,8 +9,8 @@ import { FETCH_USER } from './types';
         async dispatch => {
          // make request wait for response .then() 
          // dispatch only after we recieve response
-         const res = await axios.get('/api/current_user') 
-         dispatch({ type: FETCH_USER, payload: res });
+         const res = await axios.get('/api/current_user'); 
+         dispatch({ type: FETCH_USER, payload: res.data });
      };
 
 

@@ -8,15 +8,20 @@ module.exports = (app) => {
     })
     );
     
-    app.get('/auth/google/callback', 
-    passport.authenticate('google'));
+    app.get(
+        '/auth/google/callback', 
+        passport.authenticate('google'),
+        (req, res) => {
+          res.redirect('/surveys');  
+        }
+        );
 
     app.get('/api/logout', (req, res) => {
         // provided by passport - kills cookie associated with user
         req.logout();
         // after logging out req.user is deleted
-        res.send(req.user);
-    } )
+        res.redirect('/');
+    });
 
     // Testing Authentication
     app.get('/api/current_user', (req, res) => {
